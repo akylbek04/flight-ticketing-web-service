@@ -35,7 +35,6 @@ export default function AdminCompaniesPage() {
   const [loading, setLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingCompany, setEditingCompany] = useState<AirlineCompany | null>(null)
-  console.log('users', users)
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -67,7 +66,7 @@ export default function AdminCompaniesPage() {
           createdAt: doc.data().createdAt.toDate(),
         })) as User[]
 
-        setUsers(usersData.filter((user) => user.role === "user"))
+        setUsers(usersData)
       } catch (error) {
         console.error("Error fetching data:", error)
       } finally {
@@ -166,6 +165,7 @@ export default function AdminCompaniesPage() {
                 <div className="space-y-4">
                   {companies.map((company) => {
                     const manager = users.find((u) => u.id === company.managerId)
+                    console.log('manager', manager)
                     return (
                       <div key={company.id} className="flex items-center justify-between p-4 border rounded-lg">
                         <div className="flex-1">
@@ -299,7 +299,7 @@ function CompanyForm({
             <SelectValue placeholder="Select a user" />
           </SelectTrigger>
           <SelectContent>
-            {users.map((user) => {
+            {users.filter((user) => user.role === "user").map((user) => {
               console.log('company form user', user)
               return <SelectItem key={user.id} value={user.id}>
                 {user.name} ({user.email})

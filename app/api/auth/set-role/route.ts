@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { getAdminAuth } from "@/lib/firebase-admin"
+import { getAdminAuth, getAdminFirestore } from "@/lib/firebase-admin"
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,6 +15,16 @@ export async function POST(request: NextRequest) {
 
     const auth = getAdminAuth()
     await auth.setCustomUserClaims(uid, { role })
+
+    // Persist role in Firestore so it reflects in server-side data
+    const db = getAdminFirestore()
+    await db.collection("users").doc(uid).set(
+      {
+        role,
+        updatedAt: new Date(),
+      },
+      { merge: true }
+    )
 
     return NextResponse.json({ success: true })
   } catch (error) {
