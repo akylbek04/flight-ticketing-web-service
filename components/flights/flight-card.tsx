@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Plane, Clock } from "lucide-react"
 import type { Flight } from "@/types"
 import { useRouter } from "next/navigation"
+import { useAuth } from "@/lib/auth-context"
 
 interface FlightCardProps {
   flight: Flight
@@ -14,6 +15,7 @@ interface FlightCardProps {
 
 export function FlightCard({ flight, passengers }: FlightCardProps) {
   const router = useRouter()
+  const { user } = useAuth()
 
   console.log("Flight Card Flight:", flight)
 
@@ -28,6 +30,13 @@ export function FlightCard({ flight, passengers }: FlightCardProps) {
   }
 
   const handleBook = () => {
+    if (!user) {
+      // Redirect to login page with the intended booking URL as a redirect parameter
+      const bookingUrl = `/booking/${flight.id}?passengers=${passengers}`
+      router.push(`/auth/login?next=${encodeURIComponent(bookingUrl)}`)
+      return
+    }
+    
     router.push(`/booking/${flight.id}?passengers=${passengers}`)
   }
 
