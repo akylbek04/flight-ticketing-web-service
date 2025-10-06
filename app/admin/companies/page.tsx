@@ -83,8 +83,21 @@ export default function AdminCompaniesPage() {
     if (!confirm("Are you sure you want to delete this company?")) return
 
     try {
+      // Find the company to get the manager ID before deletion
+      const companyToDelete = companies.find((c) => c.id === companyId)
+      
+      // Delete the company
       await deleteDoc(doc(db, "companies", companyId))
       setCompanies((prev) => prev.filter((c) => c.id !== companyId))
+      
+      // If the company had a manager, downgrade their role to user
+      if (companyToDelete?.managerId) {
+        await fetch("/api/auth/set-role", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ uid: companyToDelete.managerId, role: "user" }),
+        })
+      }
     } catch (error) {
       console.error("Error deleting company:", error)
       alert("Failed to delete company")
@@ -253,13 +266,39 @@ function CompanyForm({
         onSuccess({ ...companyData, id: docRef.id } as AirlineCompany)
       }
 
-      // Update user role to company if assigned
-      if (formData.managerId) {
-        await fetch("/api/auth/set-role", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ uid: formData.managerId, role: "company" }),
-        })
+      // Handle role changes for managers
+      if (company) {
+        // If updating an existing company and manager changed
+        const oldManagerId = company.managerId
+        const newManagerId = formData.managerId
+        
+        // If there was an old manager and it's different from the new one (or being removed)
+        if (oldManagerId && oldManagerId !== newManagerId) {
+          // Downgrade old manager to user role
+          await fetch("/api/auth/set-role", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ uid: oldManagerId, role: "user" }),
+          })
+        }
+        
+        // Set new manager to company role if assigned
+        if (newManagerId) {
+          await fetch("/api/auth/set-role", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ uid: newManagerId, role: "company" }),
+          })
+        }
+      } else {
+        // Creating a new company - set manager role to company if assigned
+        if (formData.managerId) {
+          await fetch("/api/auth/set-role", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ uid: formData.managerId, role: "company" }),
+          })
+        }
       }
     } catch (error) {
       console.error("Error saving company:", error)

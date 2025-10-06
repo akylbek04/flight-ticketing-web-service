@@ -23,7 +23,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Plus, Edit, Trash2, Plane, RefreshCw } from "lucide-react"
+import { Plus, Edit, Trash2, Plane } from "lucide-react"
 import type { Flight } from "@/types"
 
 export default function CompanyFlightsPage() {
@@ -157,15 +157,6 @@ export default function CompanyFlightsPage() {
           <div className="flex items-center justify-between mb-8">
             <h1 className="text-3xl font-bold">Manage Flights</h1>
             <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                onClick={() => fetchFlights()}
-                disabled={loading}
-                className="flex items-center gap-2"
-              >
-                <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-                Refresh
-              </Button>
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
                 <Button onClick={() => setEditingFlight(null)}>

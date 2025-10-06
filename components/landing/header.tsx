@@ -8,6 +8,7 @@ import { signOut } from "firebase/auth"
 import { auth } from "@/lib/firebase"
 import { useRouter } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
+import { NavLink } from "@/components/ui/nav-link"
 
 export function Header() {
   const { user, role, loading } = useAuth()
@@ -47,18 +48,18 @@ export function Header() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="/" className="text-sm font-medium hover:text-primary transition-colors">
+            <NavLink href="/" exact>
               Home
-            </Link>
-            <Link href="/flights" className="text-sm font-medium hover:text-primary transition-colors">
+            </NavLink>
+            <NavLink href="/flights">
               Flights
-            </Link>
-            <Link href="/deals" className="text-sm font-medium hover:text-primary transition-colors">
+            </NavLink>
+            <NavLink href="/deals">
               Deals
-            </Link>
-            <Link href="/about" className="text-sm font-medium hover:text-primary transition-colors">
+            </NavLink>
+            <NavLink href="/about">
               About
-            </Link>
+            </NavLink>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -69,6 +70,7 @@ export function Header() {
               </div>
             ) : user ? (
               <div className="flex items-center gap-3">
+                <NavLink href="/dashboard">
                 <button
                   onClick={handleUserClick}
                   className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-muted transition-colors cursor-pointer group"
@@ -87,6 +89,7 @@ export function Header() {
                     </div>
                   </div>
                 </button>
+            </NavLink>
                 <Button variant="ghost" onClick={handleLogout}>
                   <LogOut className="h-4 w-4 mr-1" />
                   Logout
