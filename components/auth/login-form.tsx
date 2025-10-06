@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 export function LoginForm() {
   const [email, setEmail] = useState("")
@@ -18,6 +18,7 @@ export function LoginForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -40,8 +41,11 @@ export function LoginForm() {
         }
       }
       
-      // User is not blocked, proceed to dashboard
-      router.push("/dashboard")
+
+      // User is not blocked, proceed to next or dashboard
+      const nextParam = searchParams.get("next")
+      const nextUrl = nextParam && nextParam.startsWith("/") ? nextParam : "/dashboard"
+      router.push(nextUrl)
     } catch (err: any) {
       setError(err.message || "Failed to login")
     } finally {

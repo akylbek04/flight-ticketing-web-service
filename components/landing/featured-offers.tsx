@@ -18,6 +18,7 @@ export function FeaturedOffers() {
   const [offers, setOffers] = useState<Offer[]>([])
   const [flights, setFlights] = useState<Flight[]>([])
   const [loading, setLoading] = useState(true)
+  console.log('offers', offers)
 
   useEffect(() => {
     const fetchOffers = async () => {
@@ -25,7 +26,6 @@ export function FeaturedOffers() {
         const offersQuery = query(
           collection(db, "offers"),
           where("active", "==", true),
-          orderBy("createdAt", "desc")
         )
         const offersSnapshot = await getDocs(offersQuery)
         const offersData = offersSnapshot.docs.map((doc) => ({
@@ -68,12 +68,18 @@ export function FeaturedOffers() {
       router.push(`/booking/${offer.flightId}`)
     } else {
       // User is not logged in, redirect to login
-      router.push("/auth/login")
+      const nextUrl = `/booking/${offer.flightId}`
+      router.push(`/auth/login?next=${encodeURIComponent(nextUrl)}`)
     }
   }
 
   const getFlightForOffer = (offer: Offer) => {
     return flights.find(flight => flight.id === offer.flightId)
+  }
+
+  const getOfferTitle = (offer: Offer) => {
+    const flight = getFlightForOffer(offer)
+    return flight ? `${flight.origin} → ${flight.destination}` : "Unknown Route"
   }
   if (loading) {
     return (
@@ -129,8 +135,8 @@ export function FeaturedOffers() {
                 <Card key={offer.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                   <div className="relative h-48">
                     <img
-                      src="/placeholder.svg"
-                      alt={offer.title}
+                      src={offer.imageUrl || "/placeholder.svg"}
+                      alt={getOfferTitle(offer)}
                       className="w-full h-full object-cover"
                     />
                     <Badge className="absolute top-4 right-4 bg-accent text-accent-foreground">
@@ -140,7 +146,7 @@ export function FeaturedOffers() {
                   </div>
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
-                      <span>{offer.title}</span>
+                      <span>{getOfferTitle(offer)}</span>
                     </CardTitle>
                     <CardDescription className="flex items-center gap-2">
                       <Plane className="h-4 w-4" />

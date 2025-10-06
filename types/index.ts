@@ -63,9 +63,8 @@ export interface Banner {
 
 export interface Offer {
   id: string
-  title: string
-  description: string
   flightId: string
+  imageUrl?: string
   discount: number
   validUntil: Date
   active: boolean

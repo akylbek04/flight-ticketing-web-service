@@ -52,7 +52,8 @@ function BookingContent() {
 
   const handleBooking = async () => {
     if (!user) {
-      router.push("/auth/login")
+      const nextUrl = `/booking/${flightId}?passengers=${passengers}`
+      router.push(`/auth/login?next=${encodeURIComponent(nextUrl)}`)
       return
     }
 

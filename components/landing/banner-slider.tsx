@@ -12,7 +12,6 @@ export function BannerSlider() {
   const [banners, setBanners] = useState<Banner[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [loading, setLoading] = useState(true)
-  console.log('banners', banners)
 
   useEffect(() => {
     const fetchBanners = async () => {

@@ -23,9 +23,8 @@ export function OfferForm({ offers, onOfferChange }: OfferFormProps) {
   const [editingOffer, setEditingOffer] = useState<Offer | null>(null)
   const [flights, setFlights] = useState<Flight[]>([])
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
     flightId: "",
+    imageUrl: "",
     discount: 0,
     validUntil: "",
     active: true,
@@ -77,9 +76,8 @@ export function OfferForm({ offers, onOfferChange }: OfferFormProps) {
       setIsOpen(false)
       setEditingOffer(null)
       setFormData({
-        title: "",
-        description: "",
         flightId: "",
+        imageUrl: "",
         discount: 0,
         validUntil: "",
         active: true,
@@ -92,9 +90,8 @@ export function OfferForm({ offers, onOfferChange }: OfferFormProps) {
   const handleEdit = (offer: Offer) => {
     setEditingOffer(offer)
     setFormData({
-      title: offer.title,
-      description: offer.description,
       flightId: offer.flightId,
+      imageUrl: offer.imageUrl || "",
       discount: offer.discount,
       validUntil: offer.validUntil.toISOString().split('T')[0],
       active: offer.active,
@@ -116,9 +113,8 @@ export function OfferForm({ offers, onOfferChange }: OfferFormProps) {
   const handleOpen = () => {
     setEditingOffer(null)
     setFormData({
-      title: "",
-      description: "",
       flightId: "",
+      imageUrl: "",
       discount: 0,
       validUntil: "",
       active: true,
@@ -128,6 +124,11 @@ export function OfferForm({ offers, onOfferChange }: OfferFormProps) {
 
   const getFlightForOffer = (offer: Offer) => {
     return flights.find(flight => flight.id === offer.flightId)
+  }
+
+  const getOfferTitle = (offer: Offer) => {
+    const flight = getFlightForOffer(offer)
+    return flight ? `${flight.origin} → ${flight.destination}` : "Unknown Route"
   }
 
   return (
@@ -146,15 +147,6 @@ export function OfferForm({ offers, onOfferChange }: OfferFormProps) {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="title">Title</Label>
-                <Input
-                  id="title"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  required
-                />
-              </div>
-              <div>
                 <Label htmlFor="discount">Discount (%)</Label>
                 <Input
                   id="discount"
@@ -166,15 +158,16 @@ export function OfferForm({ offers, onOfferChange }: OfferFormProps) {
                   required
                 />
               </div>
-            </div>
-            <div>
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                required
-              />
+              <div>
+                <Label htmlFor="imageUrl">Image URL</Label>
+                <Input
+                  id="imageUrl"
+                  type="url"
+                  value={formData.imageUrl}
+                  onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                  placeholder="https://example.com/image.jpg"
+                />
+              </div>
             </div>
             <div>
               <Label htmlFor="flightId">Flight</Label>
@@ -232,16 +225,15 @@ export function OfferForm({ offers, onOfferChange }: OfferFormProps) {
             <div key={offer.id} className="flex items-center justify-between p-4 border rounded-lg">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <p className="font-semibold">{offer.title}</p>
+                  <p className="font-semibold">{getOfferTitle(offer)}</p>
                   <span className={`px-2 py-1 text-xs rounded-full ${offer.active ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}`}>
                     {offer.active ? "Active" : "Inactive"}
                   </span>
                   <span className="text-xs text-muted-foreground">{offer.discount}% OFF</span>
                 </div>
-                <p className="text-sm text-muted-foreground">{offer.description}</p>
                 {flight && (
                   <p className="text-xs text-muted-foreground">
-                    Flight: {flight.origin} → {flight.destination} - ${flight.price}
+                    ${flight.price} - {flight.companyName}
                   </p>
                 )}
                 <p className="text-xs text-muted-foreground">
