@@ -20,17 +20,17 @@ export function Footer() {
             <h3 className="font-semibold mb-4">Company</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/about" className="text-muted-foreground hover:text-foreground">
+                <Link href="/" className="text-muted-foreground hover:text-foreground">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/careers" className="text-muted-foreground hover:text-foreground">
+                <Link href="/" className="text-muted-foreground hover:text-foreground">
                   Careers
                 </Link>
               </li>
               <li>
-                <Link href="/press" className="text-muted-foreground hover:text-foreground">
+                <Link href="/" className="text-muted-foreground hover:text-foreground">
                   Press
                 </Link>
               </li>
@@ -41,17 +41,17 @@ export function Footer() {
             <h3 className="font-semibold mb-4">Support</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/help" className="text-muted-foreground hover:text-foreground">
+                <Link href="/" className="text-muted-foreground hover:text-foreground">
                   Help Center
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-muted-foreground hover:text-foreground">
+                <Link href="/" className="text-muted-foreground hover:text-foreground">
                   Contact Us
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="text-muted-foreground hover:text-foreground">
+                <Link href="/" className="text-muted-foreground hover:text-foreground">
                   FAQ
                 </Link>
               </li>
@@ -62,17 +62,17 @@ export function Footer() {
             <h3 className="font-semibold mb-4">Legal</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/privacy" className="text-muted-foreground hover:text-foreground">
+                <Link href="/" className="text-muted-foreground hover:text-foreground">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-muted-foreground hover:text-foreground">
+                <Link href="/" className="text-muted-foreground hover:text-foreground">
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link href="/cookies" className="text-muted-foreground hover:text-foreground">
+                <Link href="/" className="text-muted-foreground hover:text-foreground">
                   Cookie Policy
                 </Link>
               </li>

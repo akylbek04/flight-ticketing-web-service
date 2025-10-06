@@ -20,8 +20,6 @@ function FlightsContent() {
   const [availableAirlines, setAvailableAirlines] = useState<string[]>([])
   const [availableDestinations, setAvailableDestinations] = useState<string[]>([])
 
-  console.log("Flights Content Filters:", filters)
-
   const origin = searchParams.get("origin") || ""
   const destination = searchParams.get("destination") || ""
   const date = searchParams.get("date") || ""

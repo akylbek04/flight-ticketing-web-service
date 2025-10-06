@@ -31,14 +31,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(user)
       if (user) {
         try {
-          // Fetch user data from Firestore
           const userDoc = await getDoc(doc(db, "users", user.uid))
           if (userDoc.exists()) {
             const userData = userDoc.data()
             
-            // Check if user is blocked
             if (userData.blocked === true) {
-              // User is blocked, sign them out
               await signOut(auth)
               setUser(null)
               setRole(null)
@@ -48,13 +45,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             
             setRole((userData.role as UserRole) || "user")
           } else {
-            // Fallback to custom claims if Firestore document doesn't exist
             const idTokenResult = await user.getIdTokenResult()
             setRole((idTokenResult.claims.role as UserRole) || "user")
           }
         } catch (error) {
           console.error("Error fetching user data:", error)
-          // Fallback to custom claims on error
           const idTokenResult = await user.getIdTokenResult()
           setRole((idTokenResult.claims.role as UserRole) || "user")
         }

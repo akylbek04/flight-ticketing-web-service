@@ -9,7 +9,6 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-
       <main className="flex-1">
         <section className="relative py-20 bg-gradient-to-b from-primary/5 to-background">
           <div className="container mx-auto px-4">
@@ -26,21 +25,14 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-
-        {/* Banner Slider */}
         <section className="py-16">
           <div className="container mx-auto px-4">
             <BannerSlider />
           </div>
         </section>
-
-        {/* Featured Offers */}
         <FeaturedOffers />
-
-        {/* Features */}
         <Features />
       </main>
-
       <Footer />
     </div>
   )
