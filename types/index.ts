@@ -58,6 +58,7 @@ export interface Banner {
   active: boolean
   order: number
   createdAt: Date
+  updatedAt?: Date
 }
 
 export interface Offer {
@@ -69,4 +70,5 @@ export interface Offer {
   validUntil: Date
   active: boolean
   createdAt: Date
+  updatedAt?: Date
 }

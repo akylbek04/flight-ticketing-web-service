@@ -8,11 +8,10 @@ import { useAuth } from "@/lib/auth-context"
 import { Header } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ImageIcon, Plus } from "lucide-react"
+import { BannerForm } from "@/components/admin/banner-form"
+import { OfferForm } from "@/components/admin/offer-form"
 import type { Banner, Offer } from "@/types"
 
 export default function AdminContentPage() {
@@ -30,34 +29,34 @@ export default function AdminContentPage() {
     }
   }, [user, role, authLoading, router])
 
-  useEffect(() => {
-    const fetchContent = async () => {
-      setLoading(true)
-      try {
-        const bannersSnapshot = await getDocs(collection(db, "banners"))
-        const bannersData = bannersSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-          createdAt: doc.data().createdAt.toDate(),
-        })) as Banner[]
+  const fetchContent = async () => {
+    setLoading(true)
+    try {
+      const bannersSnapshot = await getDocs(collection(db, "banners"))
+      const bannersData = bannersSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt.toDate(),
+      })) as Banner[]
 
-        const offersSnapshot = await getDocs(collection(db, "offers"))
-        const offersData = offersSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-          validUntil: doc.data().validUntil.toDate(),
-          createdAt: doc.data().createdAt.toDate(),
-        })) as Offer[]
+      const offersSnapshot = await getDocs(collection(db, "offers"))
+      const offersData = offersSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        validUntil: doc.data().validUntil.toDate(),
+        createdAt: doc.data().createdAt.toDate(),
+      })) as Offer[]
 
-        setBanners(bannersData)
-        setOffers(offersData)
-      } catch (error) {
-        console.error("Error fetching content:", error)
-      } finally {
-        setLoading(false)
-      }
+      setBanners(bannersData)
+      setOffers(offersData)
+    } catch (error) {
+      console.error("Error fetching content:", error)
+    } finally {
+      setLoading(false)
     }
+  }
 
+  useEffect(() => {
     if (user && role === "admin") {
       fetchContent()
     }
@@ -94,75 +93,22 @@ export default function AdminContentPage() {
 
             <TabsContent value="banners" className="mt-6">
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
+                <CardHeader>
                   <CardTitle>Landing Page Banners</CardTitle>
-                  <Button size="sm">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Banner
-                  </Button>
                 </CardHeader>
                 <CardContent>
-                  {banners.length === 0 ? (
-                    <div className="text-center py-8">
-                      <ImageIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                      <p className="text-muted-foreground">No banners yet</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {banners.map((banner) => (
-                        <div key={banner.id} className="flex items-center justify-between p-4 border rounded-lg">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <p className="font-semibold">{banner.title}</p>
-                              <Badge variant={banner.active ? "default" : "secondary"}>
-                                {banner.active ? "Active" : "Inactive"}
-                              </Badge>
-                            </div>
-                            <p className="text-sm text-muted-foreground">{banner.description}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  <BannerForm banners={banners} onBannerChange={fetchContent} />
                 </CardContent>
               </Card>
             </TabsContent>
 
             <TabsContent value="offers" className="mt-6">
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
+                <CardHeader>
                   <CardTitle>Featured Offers</CardTitle>
-                  <Button size="sm">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Offer
-                  </Button>
                 </CardHeader>
                 <CardContent>
-                  {offers.length === 0 ? (
-                    <div className="text-center py-8">
-                      <ImageIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                      <p className="text-muted-foreground">No offers yet</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {offers.map((offer) => (
-                        <div key={offer.id} className="flex items-center justify-between p-4 border rounded-lg">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <p className="font-semibold">{offer.title}</p>
-                              <Badge variant={offer.active ? "default" : "secondary"}>
-                                {offer.active ? "Active" : "Inactive"}
-                              </Badge>
-                            </div>
-                            <p className="text-sm text-muted-foreground">{offer.description}</p>
-                            <p className="text-xs text-muted-foreground">
-                              Valid until {offer.validUntil.toLocaleDateString()}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  <OfferForm offers={offers} onOfferChange={fetchContent} />
                 </CardContent>
               </Card>
             </TabsContent>
