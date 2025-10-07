@@ -8,7 +8,7 @@ A modern, full-stack flight ticketing web application built with Next.js, React,
 
 ## 🎥 Demo Video
 
-**YouTube Demo:** [Link to be added]
+**YouTube Demo:** [https://youtu.be/COVJ3szVQC8](https://youtu.be/COVJ3szVQC8)
 
 ## 📋 Features
 
