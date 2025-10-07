@@ -34,7 +34,7 @@ function FlightsContent() {
             <h1 className="text-3xl font-bold mb-2">Available Flights</h1>
             {origin && destination ? (
               <p className="text-muted-foreground">
-                {origin} → {destination} • {date} • {passengers} passenger{passengers !== "1" ? "s" : ""}
+                {origin} → {destination}{date ? ` • ${date}` : ""} • {passengers} passenger{passengers !== "1" ? "s" : ""}
               </p>
             ) : (
               <p className="text-muted-foreground">
@@ -42,7 +42,7 @@ function FlightsContent() {
               </p>
             )}
           </div>
-
+          
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <aside className="lg:col-span-1">
               <FlightFilters 

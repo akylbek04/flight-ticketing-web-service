@@ -35,6 +35,7 @@ export default function AdminCompaniesPage() {
   const [loading, setLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingCompany, setEditingCompany] = useState<AirlineCompany | null>(null)
+  console.log('companies', companies)
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -178,7 +179,6 @@ export default function AdminCompaniesPage() {
                 <div className="space-y-4">
                   {companies.map((company) => {
                     const manager = users.find((u) => u.id === company.managerId)
-                    console.log('manager', manager)
                     return (
                       <div key={company.id} className="flex items-center justify-between p-4 border rounded-lg">
                         <div className="flex-1">

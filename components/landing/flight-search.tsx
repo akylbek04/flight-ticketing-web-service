@@ -66,7 +66,7 @@ export function FlightSearch() {
               <Calendar className="h-4 w-4" />
               Departure Date
             </Label>
-            <Input id="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+            <Input id="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
           </div>
           <div className="space-y-2">
             <Label htmlFor="passengers" className="flex items-center gap-2">
