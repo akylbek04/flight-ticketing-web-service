@@ -27,10 +27,6 @@ export function FlightList({ origin, destination, date, passengers, filters, onA
   const [flights, setFlights] = useState<Flight[]>([])
   const [loading, setLoading] = useState(true)
 
-  console.log("Flight List Filters:", filters)
-
-  console.log("Flight List Flights:", flights)
-
   useEffect(() => {
     const fetchFlights = async () => {
       setLoading(true)
@@ -64,7 +60,6 @@ export function FlightList({ origin, destination, date, passengers, filters, onA
           createdAt: doc.data().createdAt.toDate(),
         })) as Flight[]
 
-        // Apply filters
         const filtered = flightsData.filter((flight) => {
           if (flight.price > filters.maxPrice) return false
           if (filters.airlines.length > 0 && !filters.airlines.includes(flight.companyName)) return false
@@ -74,7 +69,7 @@ export function FlightList({ origin, destination, date, passengers, filters, onA
           if (flight.availableSeats < passengers) return false
 
           if (date) {
-            const searchDate = new Date(date) // incoming prop from search
+            const searchDate = new Date(date) 
             const flightDate = new Date(flight.departureTime)
         
             const searchDateStr = searchDate.toISOString().split("T")[0]
@@ -87,8 +82,6 @@ export function FlightList({ origin, destination, date, passengers, filters, onA
         })
 
 
-
-        // Sort
         filtered.sort((a, b) => {
           if (filters.sortBy === "price") return a.price - b.price
           if (filters.sortBy === "duration") return a.duration - b.duration
@@ -98,7 +91,6 @@ export function FlightList({ origin, destination, date, passengers, filters, onA
 
         setFlights(filtered)
         
-        // Extract unique airlines and destinations from all flights (not just filtered ones)
         const uniqueAirlines = [...new Set(flightsData.map(flight => flight.companyName))].sort()
         const uniqueDestinations = [...new Set(flightsData.map(flight => flight.destination))].sort()
         onAirlinesChange?.(uniqueAirlines)

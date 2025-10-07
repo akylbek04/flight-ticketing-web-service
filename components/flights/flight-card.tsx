@@ -17,8 +17,6 @@ export function FlightCard({ flight, passengers }: FlightCardProps) {
   const router = useRouter()
   const { user } = useAuth()
 
-  console.log("Flight Card Flight:", flight)
-
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
   }
@@ -31,7 +29,6 @@ export function FlightCard({ flight, passengers }: FlightCardProps) {
 
   const handleBook = () => {
     if (!user) {
-      // Redirect to login page with the intended booking URL as a redirect parameter
       const bookingUrl = `/booking/${flight.id}?passengers=${passengers}`
       router.push(`/auth/login?next=${encodeURIComponent(bookingUrl)}`)
       return

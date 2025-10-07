@@ -64,10 +64,8 @@ export function FeaturedOffers() {
 
   const handleBookNow = (offer: Offer) => {
     if (user) {
-      // User is logged in, navigate to booking page
       router.push(`/booking/${offer.flightId}`)
     } else {
-      // User is not logged in, redirect to login
       const nextUrl = `/booking/${offer.flightId}`
       router.push(`/auth/login?next=${encodeURIComponent(nextUrl)}`)
     }

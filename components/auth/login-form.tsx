@@ -28,21 +28,17 @@ export function LoginForm() {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password)
       
-      // Check if user is blocked in Firestore
       const userDoc = await getDoc(doc(db, "users", userCredential.user.uid))
       
       if (userDoc.exists()) {
         const userData = userDoc.data()
         if (userData.blocked === true) {
-          // User is blocked, sign them out and show error
           await signOut(auth)
           setError("Your account has been blocked. Please contact support.")
           return
         }
       }
       
-
-      // User is not blocked, proceed to next or dashboard
       const nextParam = searchParams.get("next")
       const nextUrl = nextParam && nextParam.startsWith("/") ? nextParam : "/dashboard"
       router.push(nextUrl)

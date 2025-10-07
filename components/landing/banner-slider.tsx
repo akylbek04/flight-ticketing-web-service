@@ -27,7 +27,6 @@ export function BannerSlider() {
           createdAt: doc.data().createdAt.toDate(),
         })) as Banner[]
         
-        // Sort banners by order in ascending order
         bannersData.sort((a, b) => a.order - b.order)
         
         setBanners(bannersData)

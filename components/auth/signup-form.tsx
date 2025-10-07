@@ -28,12 +28,10 @@ export function SignupForm() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password)
 
-      // Update the user's display name
       await updateProfile(userCredential.user, {
         displayName: name,
       })
 
-      // Create user document in Firestore
       await setDoc(doc(db, "users", userCredential.user.uid), {
         name,
         email,
